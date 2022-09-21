@@ -9,27 +9,11 @@ import ShoppingPage from './products/ShoppingPage'
 
 export default function App() {
   const [productList, setProductList] = useState(PRODUCTS);
-  const [orderList, setOrderList] = useState(ORDERS);
-  const [userList, setUserList] = useState(USERS);
-  const [loggedInUserId, setLoggedInUserId] = useState(0);
 
-  const createOrder = (orderData) => {
-    setOrderList(orderList.concat({ 
-      ...orderData,
-      id: orderList[orderList.length - 1].id + 1 
-    }))
-  }
-
-  const deleteOrder = (orderId) => {
-    setOrderList(orderList.filter(order => order.id !== orderId))
-  }
+  
 
   const createProduct = (newProductData) => {
     setProductList(productList.concat({ ...newProductData, id: productList[productList.length - 1].id + 1 }))
-  }
-
-  const setLoggedInUser = (userId) => {
-    setLoggedInUserId(userId)
   }
 
   const loggedInUser = userList.find(user => user.id === loggedInUserId)
@@ -51,10 +35,10 @@ export default function App() {
       </Navbar>
       <div className="container mt-3">
         <Routes>
-          <Route path="/" element={<ShoppingPage productList={productList} onOrder={createOrder} loggedInUserId={loggedInUserId} />} />
-          <Route path="/products/:productId" element={<ProductPage productList={productList} onOrder={createOrder} loggedInUserId={loggedInUserId} />} />
-          <Route path="/orders" element={<OrdersPage orderList={orderList} productList={productList} userList={userList} onDelete={deleteOrder}/>} />
-          <Route path="/login" element={<LoginPage userList={userList} onLogin={setLoggedInUser}/>} />
+          <Route path="/" element={<ShoppingPage productList={productList} />} />
+          <Route path="/products/:productId" element={<ProductPage productList={productList} onOrder={createOrder} />} />
+          <Route path="/orders" element={<OrdersPage orderList={orderList} productList={productList} onDelete={deleteOrder}/>} />
+          <Route path="/login" element={<LoginPage/>} />
         </Routes>
       </div>
     </>
