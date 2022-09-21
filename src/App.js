@@ -1,24 +1,15 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { Nav, Navbar } from 'react-bootstrap'
 import { Route, Routes, Link } from 'react-router-dom'
 import LoginPage from './users/LoginPage'
-import { ORDERS, PRODUCTS, USERS } from './data'
 import OrdersPage from './orders/OrdersPage'
 import ProductPage from './products/ProductPage'
 import ShoppingPage from './products/ShoppingPage'
+import { useSelector } from 'react-redux'
 
 export default function App() {
-  const [productList, setProductList] = useState(PRODUCTS);
-
-  
-
-  const createProduct = (newProductData) => {
-    setProductList(productList.concat({ ...newProductData, id: productList[productList.length - 1].id + 1 }))
-  }
-
-  const loggedInUser = userList.find(user => user.id === loggedInUserId)
-
-  const numUserOrders = orderList.filter(order => order.userId === loggedInUserId).length
+  const loggedInUser = useSelector(state => state.users.userList.find(user => user.id === state.users.loggedInUserId))
+  const numUserOrders = useSelector(state => state.orders.orderList.filter(order => order.userId === state.users.loggedInUserId).length)
 
   return (
     <>
@@ -35,10 +26,10 @@ export default function App() {
       </Navbar>
       <div className="container mt-3">
         <Routes>
-          <Route path="/" element={<ShoppingPage productList={productList} />} />
-          <Route path="/products/:productId" element={<ProductPage productList={productList} onOrder={createOrder} />} />
-          <Route path="/orders" element={<OrdersPage orderList={orderList} productList={productList} onDelete={deleteOrder}/>} />
-          <Route path="/login" element={<LoginPage/>} />
+          <Route path="/" element={<ShoppingPage />} />
+          <Route path="/products/:productId" element={<ProductPage />} />
+          <Route path="/orders" element={<OrdersPage />} />
+          <Route path="/login" element={<LoginPage />} />
         </Routes>
       </div>
     </>

@@ -1,13 +1,18 @@
 import React, { useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { setLoggedInUser } from './userSlice';
 
-export default function LoginPage({ userList, onLogin }) {
+export default function LoginPage() {
   const [userValue, setUserValue] = useState(0);
 
+  const userList = useSelector(state => state.users.userList)
+
+  const dispatch = useDispatch();
   const navigate = useNavigate();
 
   const onLoginButtonClick = () => {
-    onLogin(parseInt(userValue))
+    dispatch(setLoggedInUser(parseInt(userValue)))
     navigate("/")
   }
 

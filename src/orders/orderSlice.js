@@ -1,28 +1,24 @@
+import { createSlice } from "@reduxjs/toolkit";
+import { ORDERS } from "../data";
 
-
-const userSlice = createSlice({
-    name: "users",
+const orderSlice = createSlice({
+    name: "orders",
     initialState: {
         orderList: ORDERS
     },
     reducers: {
         createOrder: (state, action) => {
-            // code to create
+            state.orderList.push({
+                ...action.payload,
+                id: state.orderList[state.orderList.length - 1].id + 1 // id hack - breaks if all orders are deleted
+            })
         },
         deleteOrder: (state, action) => {
-            // code to delete
+            state.orderList = state.orderList.filter(order => order.id !== action.payload)
         }
     }
 })
 
+export const orderReducer = orderSlice.reducer;
 
-//   const createOrder = (orderData) => {
-//     setOrderList(orderList.concat({ 
-//       ...orderData,
-//       id: orderList[orderList.length - 1].id + 1 
-//     }))
-//   }
-
-//   const deleteOrder = (orderId) => {
-//     setOrderList(orderList.filter(order => order.id !== orderId))
-//   }
+export const { createOrder, deleteOrder } = orderSlice.actions;

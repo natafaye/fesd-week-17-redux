@@ -1,3 +1,5 @@
+import { createSlice } from "@reduxjs/toolkit";
+import { USERS } from '../data';
 
 const userSlice = createSlice({
     name: "users",
@@ -6,16 +8,18 @@ const userSlice = createSlice({
         loggedInUserId: 0
     },
     reducers: {
-        setLoggedInUser: (action, state) => {
+        setLoggedInUser: (state, action) => {
             state.loggedInUserId = action.payload;
         },
-        registerUser: (action, state) => {
+        registerUser: (state, action) => {
             state.userList.push({
                 id: state.userList[state.userList.length - 1].id + 1, // id hack
-                name: action.payload // action.payload is basically = the data that was given
+                name: action.payload
             })
         }
     }
 })
 
-// some exports down here
+export const userReducer = userSlice.reducer;
+
+export const { setLoggedInUser, registerUser } = userSlice.actions;
