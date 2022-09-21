@@ -1,56 +1,60 @@
 import React, { useState } from 'react'
 import { Nav, Navbar } from 'react-bootstrap'
 import { Route, Routes, Link } from 'react-router-dom'
-import CartPage from './cart/CartPage'
-import { SHOPPING_GOODS, CART_ITEMS } from './data'
-import HomePage from './home/HomePage'
-import ShoppingGoodPage from './shopping/ShoppingGoodPage'
-import ShoppingPage from './shopping/ShoppingPage'
-
+import LoginPage from './users/LoginPage'
+import { ORDERS, PRODUCTS, USERS } from './data'
+import OrdersPage from './orders/OrdersPage'
+import ProductPage from './products/ProductPage'
+import ShoppingPage from './products/ShoppingPage'
 
 export default function App() {
+  const [productList, setProductList] = useState(PRODUCTS);
+  const [orderList, setOrderList] = useState(ORDERS);
+  const [userList, setUserList] = useState(USERS);
+  const [loggedInUserId, setLoggedInUserId] = useState(0);
 
-  const [shoppingGoods, setShoppingGoods] = useState(SHOPPING_GOODS);
-  const [cartItems, setCartItems] = useState(CART_ITEMS);
-
-  const handleAddToCart = (goodId) => {
-    // look through the cart, see if it's already in the shopping cart
-    const item = cartItems.find( item => item.goodId === goodId )
-    if(item) {
-      setCartItems(currCartItems => {
-        const currItem = currCartItems.find( i => i.goodId === goodId )
-        const index = currCartItems.findIndex( i => i.goodId === goodId )
-
-        const cartItemsCopy = [...currCartItems];
-        const itemCopy = {...currItem, quantity: currItem.quantity + 1 }
-        cartItemsCopy[index] = itemCopy;
-
-        return cartItemsCopy;
-      })
-    }
-    else {
-      // make a new item
-      // if it's not, then we need a new cart item, set to the quanitity 1, add it to the array of car items
-    }
+  const createOrder = (orderData) => {
+    setOrderList(orderList.concat({ 
+      ...orderData,
+      id: orderList[orderList.length - 1].id + 1 
+    }))
   }
+
+  const deleteOrder = (orderId) => {
+    setOrderList(orderList.filter(order => order.id !== orderId))
+  }
+
+  const createProduct = (newProductData) => {
+    setProductList(productList.concat({ ...newProductData, id: productList[productList.length - 1].id + 1 }))
+  }
+
+  const setLoggedInUser = (userId) => {
+    setLoggedInUserId(userId)
+  }
+
+  const loggedInUser = userList.find(user => user.id === loggedInUserId)
+
+  const numUserOrders = orderList.filter(order => order.userId === loggedInUserId).length
 
   return (
     <>
       <Navbar bg="dark" variant="dark">
         <div className="container">
-          <Navbar.Brand href="#home">Navbar</Navbar.Brand>
+          <Navbar.Brand href="#home">Chairs R Us</Navbar.Brand>
           <Nav className="me-auto">
-            <Nav.Link as={Link} to="/shopping">Shopping</Nav.Link>
-            <Nav.Link as={Link} to="/cart">Cart</Nav.Link>
+            <Nav.Link as={Link} to="/">Shopping</Nav.Link>
+            <Nav.Link as={Link} to="/orders">Orders</Nav.Link>
+            <Nav.Link as={Link} to="/login">Login</Nav.Link>
           </Nav>
+          <span className="navbar-text">{ loggedInUser.name } | { numUserOrders } orders</span>
         </div>
       </Navbar>
-      <div className="container">
+      <div className="container mt-3">
         <Routes>
-          <Route path="/" element={<HomePage />} />
-          <Route path="/shopping" element={<ShoppingPage shoppingGoods={shoppingGoods} />} />
-          <Route path="/shopping/:goodId" element={<ShoppingGoodPage shoppingGoods={shoppingGoods} onAddToCart={handleAddToCart} />} />
-          <Route path="/cart" element={<CartPage shoppingGoods={shoppingGoods} cartItems={cartItems} />} />
+          <Route path="/" element={<ShoppingPage productList={productList} onOrder={createOrder} loggedInUserId={loggedInUserId} />} />
+          <Route path="/products/:productId" element={<ProductPage productList={productList} onOrder={createOrder} loggedInUserId={loggedInUserId} />} />
+          <Route path="/orders" element={<OrdersPage orderList={orderList} productList={productList} userList={userList} onDelete={deleteOrder}/>} />
+          <Route path="/login" element={<LoginPage userList={userList} onLogin={setLoggedInUser}/>} />
         </Routes>
       </div>
     </>
