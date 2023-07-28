@@ -8,7 +8,7 @@ import ShoppingPage from './products/ShoppingPage'
 import { useSelector } from 'react-redux'
 
 export default function App() {
-  const loggedInUser = useSelector(state => state.users.userList.find(user => user.id === state.users.loggedInUserId))
+  const loggedInUsername = useSelector(state => state.users.userList.find(user => user.id === state.users.loggedInUserId).name)
   const numUserOrders = useSelector(state => state.orders.orderList.filter(order => order.userId === state.users.loggedInUserId).length)
 
   return (
@@ -21,7 +21,7 @@ export default function App() {
             <Nav.Link as={Link} to="/orders">Orders</Nav.Link>
             <Nav.Link as={Link} to="/login">Login</Nav.Link>
           </Nav>
-          <span className="navbar-text">{ loggedInUser.name } | { numUserOrders } orders</span>
+          <span className="navbar-text">{ loggedInUsername } | { numUserOrders } orders</span>
         </div>
       </Navbar>
       <div className="container mt-3">
