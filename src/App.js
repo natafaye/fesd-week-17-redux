@@ -1,15 +1,25 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { Nav, Navbar } from 'react-bootstrap'
 import { Route, Routes, Link } from 'react-router-dom'
 import LoginPage from './users/LoginPage'
 import OrdersPage from './orders/OrdersPage'
 import ProductPage from './products/ProductPage'
 import ShoppingPage from './products/ShoppingPage'
-import { useSelector } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
+import { fetchOrders } from './orders/orderSlice'
 
 export default function App() {
   const loggedInUsername = useSelector(state => state.users.userList.find(user => user.id === state.users.loggedInUserId).name)
   const numUserOrders = useSelector(state => state.orders.orderList.filter(order => order.userId === state.users.loggedInUserId).length)
+  const loading = useSelector(state => state.orders.loading)
+  const errorMessage = useSelector(state => state.orders.errorMessage)
+
+  const dispatch = useDispatch()
+
+  useEffect(() => {
+    dispatch(fetchOrders())
+    dispatch(fetchProducts())
+  })
 
   return (
     <>

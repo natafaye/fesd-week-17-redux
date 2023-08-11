@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router-dom';
-import { createOrder } from '../orders/orderSlice';
+import { postOrder } from '../orders/orderSlice';
 
 export default function ProductPage() {
   let { productId } = useParams();
@@ -13,7 +13,7 @@ export default function ProductPage() {
   const dispatch = useDispatch();
 
   const onOrderButtonClick = () => {
-    dispatch(createOrder({ productId: productId, userId: loggedInUserId }));
+    dispatch(postOrder({ productId: productId, userId: loggedInUserId }));
   }
 
   return (

@@ -8,6 +8,11 @@ import { BrowserRouter } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './store';
 
+// before you do anything else, start fetching the data
+// starting is super fast (it doesn't wait)
+store.dispatch(fetchOrders())
+store.dispatch(fetchProducts())
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
